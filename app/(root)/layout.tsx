@@ -1,7 +1,14 @@
+import { isAuthenticated } from '@/lib/actions/auth.action'
+import { redirect } from 'next/navigation';
 import Link from 'next/link'
 import React, { ReactNode } from 'react'
 
-const RootLayout = ({ children }: { children: ReactNode }) => {
+const RootLayout = async ({ children }: { children: ReactNode }) => {
+    const isUserAuthenticated = await isAuthenticated();
+    if (!isUserAuthenticated) {
+        redirect('/auth/signin');
+    }
+
     return (
         <div className="flex flex-col min-h-screen bg-black ">
             <div className='bg-black min-h-screen text-white mx-40 max-lg:mx-4 max-sm:mx-4'>

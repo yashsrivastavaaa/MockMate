@@ -12,7 +12,7 @@ const InterviewCard = ({ interviewId, role, userId, type, techstack, createdAt }
     const formattedDate = dayjs(feedback?.createdAt || createdAt || Date.now()).format('MMM D, YYYY');
 
     return (
-        <div className='bg-gradient-to-b from-[#4B4D4F] to-[#4B4D4F33]  p-0.5 rounded-2xl w-[340px] max-sm:w-full min-h-96'>
+        <div className='bg-gradient-to-b from-[#4B4D4F] to-[#4B4D4F33]  p-0.5 rounded-2xl w-[340px] max-[1144px]:w-full min-h-96'>
 
             <div className="bg-gradient-to-b from-[#1A1C20] to-[#08090D] rounded-2xl min-h-full flex flex-col p-1 relative overflow-hidden gap-10 justify-between ">
                 <div className="bg-black rounded-2xl p-5">
