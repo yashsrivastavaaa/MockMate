@@ -28,6 +28,7 @@ type completeData = {
 const Page = () => {
   const [interviews, setInterviews] = useState<completeData[]>([]);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null); // 👈 New state for name
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -37,10 +38,12 @@ const Page = () => {
         const user = await getCurrentUser();
         if (user?.email) {
           setUserEmail(user.email);
+          setUserName(user.name); // 👈 Set the user name
           const result = await db
             .select()
             .from(feedbackSchema)
-            .where(eq(feedbackSchema.email, user.email)).orderBy(sql`${feedbackSchema.id} DESC`);
+            .where(eq(feedbackSchema.email, user.email))
+            .orderBy(sql`${feedbackSchema.id} DESC`);
           setInterviews(result);
         }
       } catch (error) {
@@ -56,7 +59,7 @@ const Page = () => {
 
   return (
     <div>
-      {/* Embedded spinner styles */}
+      {/* Spinner Styles */}
       <style jsx>{`
         .spinner {
           border: 4px solid rgba(255, 255, 255, 0.2);
@@ -75,6 +78,13 @@ const Page = () => {
           }
         }
       `}</style>
+
+      {/* Welcome Message */}
+      {userName && (
+        <div className="mx-16 mt-8 text-center text-4xl font-bold text-white max-sm:mx-4">
+          Welcome, {userName.split(' ')[0]} 👋
+        </div>
+      )}
 
       <div className="flex flex-row bg-gradient-to-b from-[#171532] to-[#08090D] rounded-3xl mx-16 my-10 items-center justify-between max-sm:mx-4">
         <div className="flex gap-10 mt-10 mb-10 max-sm:mt-0 max-sm:mb-3 max-sm:ml-2 max-sm:mr-2">

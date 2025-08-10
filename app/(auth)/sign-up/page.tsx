@@ -128,7 +128,7 @@ export default function SignUp() {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className={`w-full flex items-center justify-center ${isLoading
+                        className={`w-full flex items-center justify-center cursor-pointer ${isLoading
                             ? 'bg-blue-100 cursor-not-allowed'
                             : 'bg-blue-200 hover:bg-blue-300'
                             } text-black transition-colors py-3 rounded-full text-base font-semibold focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2`}

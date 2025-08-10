@@ -90,7 +90,7 @@ export default function SignIn() {
                         <button
                             type="button"
                             onClick={togglePassword}
-                            className="absolute right-3 top-[42px] text-gray-400 hover:text-gray-200"
+                            className="absolute right-3 top-[42px] text-gray-400  cursor-pointer"
                             aria-label="Toggle password visibility"
                         >
                             {showPassword ? <FiEyeOff size={22} /> : <FiEye size={22} />}
@@ -103,7 +103,7 @@ export default function SignIn() {
                         className={`w-full flex items-center justify-center ${isLoading
                             ? 'bg-blue-100 cursor-not-allowed'
                             : 'bg-blue-200 hover:bg-blue-300'
-                            } text-black transition-colors py-3 rounded-full text-base font-semibold focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2`}
+                            } text-black transition-colors py-3 rounded-full text-base font-semibold focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer focus:ring-offset-2`}
                     >
                         {isLoading ? (
                             <div className="w-5 h-5 border-2 border-t-transparent border-blue-600 rounded-full animate-spin" />

@@ -120,3 +120,13 @@ export async function isAuthenticated() {
 
     return !!user;
 }
+
+
+// Sign out: clear the session cookie
+export async function signOut() {
+    const cookieStore = cookies();
+    (await cookieStore).set('session', '', {
+        maxAge: 0,
+        path: '/',
+    });
+}
