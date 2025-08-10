@@ -13,6 +13,7 @@ interface FeedbackScores {
     confidence: number;
     summary: string;
     suggestions: string[];
+    role: string; // Add role here
 }
 
 interface FeedbackProps {
@@ -44,6 +45,7 @@ const FeedbackDisplay = ({ feedback, userName, onRetry }: FeedbackProps) => {
                     confidence: feedback.confidence.toString(),
                     summary: feedback.summary,
                     suggestions: feedback.suggestions.join(', '),
+                    role: feedback.role.toString(), // Save role here
                 });
             } catch (error) {
                 console.error('Error adding feedback to DB:', error);
@@ -55,7 +57,7 @@ const FeedbackDisplay = ({ feedback, userName, onRetry }: FeedbackProps) => {
         return () => {
             isMounted = false;
         };
-    }, [feedback]); // only re-run if feedback changes
+    }, [feedback]);
 
     const getColor = (score: number) => {
         if (score >= 85) return 'text-green-500';
@@ -68,6 +70,10 @@ const FeedbackDisplay = ({ feedback, userName, onRetry }: FeedbackProps) => {
             <h2 className="text-3xl sm:text-4xl font-bold text-center">
                 Interview Feedback for {userName}
             </h2>
+
+            <p className="text-lg text-gray-400 mt-2 text-center">
+                Detected Role: <span className="text-white font-semibold">{feedback.role}</span>
+            </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
                 <FeedbackItem label="Communication Skills" score={feedback.communication} color={getColor(feedback.communication)} />

@@ -16,6 +16,7 @@ export async function evaluateConversation(conversation: Msg[]): Promise<string>
             problemSolving: 0,
             culturalFit: 0,
             confidence: 0,
+            role: 'Unknown',
             summary: 'No transcript was provided.',
             suggestions: ['Provide interview transcript for evaluation.'],
         });
@@ -25,6 +26,7 @@ export async function evaluateConversation(conversation: Msg[]): Promise<string>
     const prompt = `
 You are an expert interviewer. Evaluate the transcript below and return JSON with:
 - communication, technical, problemSolving, culturalFit, confidence: each 0-100
+- role: the most likely job role being interviewed for, e.g. "Software Engineer", "Data Scientist", etc.
 - summary: string
 - suggestions: string[]
 

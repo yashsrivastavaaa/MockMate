@@ -28,6 +28,7 @@ const Agent = ({ userName }: AgentProps) => {
     const [conversationHistory, setConversationHistory] = useState<Message[]>([]);
     const [showFeedback, setShowFeedback] = useState(false);
     const [feedbackResult, setFeedbackResult] = useState<any>(null);
+    const [loading, setLoading] = useState(false);
 
     const conversation = useConversation({
         onConnect: () => console.log('✅ Connected to ElevenLabs agent'),
@@ -74,13 +75,13 @@ const Agent = ({ userName }: AgentProps) => {
 
     const handleEndCall = useCallback(async () => {
         try {
+            setLoading(true);
             await conversation.endSession();
             setCallStatus(CallStatus.INACTIVE);
 
             console.log('\n📝 === Full Conversation History ===');
             console.log(conversationHistory);
 
-            // Avoid empty evaluations
             let historyToEvaluate = conversationHistory;
             if (conversationHistory.length === 0) {
                 historyToEvaluate = [
@@ -101,6 +102,8 @@ const Agent = ({ userName }: AgentProps) => {
                 const jsonString = jsonMatch ? jsonMatch[1].trim() : evaluationRaw.trim();
 
                 evaluationJSON = JSON.parse(jsonString);
+
+                if (!evaluationJSON.role) evaluationJSON.role = 'Unknown';
             } catch (parseError) {
                 console.error('Error parsing evaluation JSON:', parseError);
                 evaluationJSON = {
@@ -111,6 +114,7 @@ const Agent = ({ userName }: AgentProps) => {
                     culturalFit: 0,
                     confidence: 0,
                     suggestions: [],
+                    role: 'Unknown',
                 };
             }
 
@@ -118,6 +122,8 @@ const Agent = ({ userName }: AgentProps) => {
             setShowFeedback(true);
         } catch (error) {
             console.error('Error ending call or evaluating:', error);
+        } finally {
+            setLoading(false);
         }
     }, [conversation, conversationHistory]);
 
@@ -137,7 +143,20 @@ const Agent = ({ userName }: AgentProps) => {
     }
 
     return (
-        <div className="flex flex-col items-center gap-6 w-full">
+        <div className="relative flex flex-col items-center gap-6 w-full">
+            {/* Fullscreen loading overlay */}
+            {loading && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 pointer-events-auto">
+                    <div className="text-white text-lg font-semibold">
+                        Please wait while we process your interview...
+                    </div>
+                    {/* 
+                    // If you want a spinner, you can replace above text with spinner markup,
+                    // e.g. a simple CSS spinner or SVG spinner here
+                    */}
+                </div>
+            )}
+
             <div className="flex flex-col sm:flex-row gap-10 items-center justify-between w-full">
                 {/* AI Interviewer */}
                 <div className="flex flex-col items-center justify-center p-4 sm:p-7 h-[360px] sm:h-[400px] bg-gradient-to-b from-[#171532] to-[#08090D] rounded-lg border-2 border-primary-200/50 flex-1 sm:basis-1/2 w-full">
@@ -169,7 +188,7 @@ const Agent = ({ userName }: AgentProps) => {
                 {callStatus !== CallStatus.ACTIVE ? (
                     <button
                         onClick={handleStartCall}
-                        disabled={status === 'connected'}
+                        disabled={status === 'connected' || loading}
                         className="relative inline-block px-7 py-3 font-bold text-sm leading-5 text-white transition-colors duration-150 bg-success-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-success-200 hover:bg-success-200 min-w-28 cursor-pointer"
                     >
                         <span className="relative">Call</span>
@@ -177,9 +196,10 @@ const Agent = ({ userName }: AgentProps) => {
                 ) : (
                     <button
                         onClick={handleEndCall}
-                        className="inline-block px-7 py-3 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 hover:bg-destructive-200 min-w-28"
+                        disabled={loading}
+                        className="inline-block px-7 py-3 text-sm font-bold leading-5 text-white transition-colors duration-150 bg-destructive-100 border border-transparent rounded-full shadow-sm focus:outline-none focus:shadow-2xl active:bg-destructive-200 hover:bg-destructive-200 min-w-28 cursor-pointer"
                     >
-                        End
+                        {loading ? 'Ending...' : 'End'}
                     </button>
                 )}
             </div>

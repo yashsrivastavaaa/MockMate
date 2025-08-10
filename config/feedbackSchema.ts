@@ -5,6 +5,7 @@ export const feedbackSchema = pgTable('feedback', {
     id: serial('id').primaryKey(),
     user_id: varchar('user_id', { length: 50 }).notNull(),
     name: varchar('name', { length: 100 }).notNull(),
+    role: varchar('role', { length: 100 }).notNull(),
     email: varchar('email', { length: 100 }).notNull(),
     communication: varchar('communication', { length: 10 }).default('0'),
     technical: varchar('technical', { length: 10 }).default('0'),
