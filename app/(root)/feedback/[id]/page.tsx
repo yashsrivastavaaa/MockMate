@@ -1,13 +1,11 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { HomeIcon } from '@heroicons/react/24/solid';
+import { HomeIcon, ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { eq } from 'drizzle-orm';
 import { feedbackSchema } from '@/config/feedbackSchema';
 import { db } from '@/config/feedbackdb';
-
-
 
 type Interview = {
     id: number;
@@ -22,16 +20,21 @@ type Interview = {
     summary: string | null;
     suggestions: string | null;
     created_at: string | null;
+    role: string | null;
 };
 
-interface Props {
-    id: string;
-}
+type FeedbackPageProps = {
+    params: {
+        id: string;
+    };
+};
 
-const InterviewDetails = ({ id }: Props) => {
+const FeedbackPage = ({ params }: FeedbackPageProps) => {
     const router = useRouter();
     const [interview, setInterview] = useState<Interview | null>(null);
     const [loading, setLoading] = useState(false);
+
+    const id = parseInt(params.id); // This is fine in current Next.js versions
 
     const getColor = (score: number) => {
         if (score >= 85) return 'text-green-500';
@@ -46,14 +49,12 @@ const InterviewDetails = ({ id }: Props) => {
         const fetchUserAndData = async () => {
             setLoading(true);
             try {
-
                 const result = await db
                     .select()
                     .from(feedbackSchema)
-                    .where(eq(feedbackSchema.id, Number(id)));
+                    .where(eq(feedbackSchema.id, id));
 
                 setInterview(result[0] || null);
-
             } catch (error) {
                 console.error('Error fetching data:', error);
             } finally {
@@ -69,7 +70,9 @@ const InterviewDetails = ({ id }: Props) => {
     }
 
     if (!interview) {
-        return <p className="text-red-500 text-center mt-10">Interview not found.</p>;
+        return (
+            <p className="text-red-500 text-center mt-10">Interview not found.</p>
+        );
     }
 
     const parsedSuggestions =
@@ -77,11 +80,25 @@ const InterviewDetails = ({ id }: Props) => {
 
     return (
         <div className="flex flex-col items-center gap-8 w-full max-w-3xl mx-auto p-6">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center">
-                Interview Feedback for {interview.name}
+            {/* Back button aligned with container left edge */}
+            <button
+                onClick={() => router.back()}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-md font-semibold hover:bg-gray-800 cursor-pointer shadow-md self-start"
+                aria-label="Go back"
+            >
+                <ArrowLeftIcon className="w-5 h-5" />
+                Back
+            </button>
+
+            <h2 className="text-3xl sm:text-4xl font-bold text-center w-full">
+                Interview Feedback for {interview.role}
             </h2>
 
             <p className="text-md text-gray-400 mt-2 text-center">
+                Name: <span className="text-white font-medium">{interview.name}</span>
+            </p>
+
+            <p className="text-md text-gray-400 mt-0 text-center">
                 Email: <span className="text-white font-medium">{interview.email}</span>
             </p>
 
@@ -155,4 +172,4 @@ const FeedbackItem = ({
     </div>
 );
 
-export default InterviewDetails;
+export default FeedbackPage;

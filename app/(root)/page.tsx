@@ -7,7 +7,7 @@ import { Button } from '@/components/Button';
 import InterviewCard from '@/components/InterviewCard';
 import { db } from '@/config/feedbackdb';
 import { feedbackSchema } from '@/config/feedbackSchema';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import { getCurrentUser } from '@/lib/actions/auth.action';
 
 type completeData = {
@@ -40,7 +40,7 @@ const Page = () => {
           const result = await db
             .select()
             .from(feedbackSchema)
-            .where(eq(feedbackSchema.email, user.email));
+            .where(eq(feedbackSchema.email, user.email)).orderBy(sql`${feedbackSchema.id} DESC`);
           setInterviews(result);
         }
       } catch (error) {
@@ -119,7 +119,7 @@ const Page = () => {
                 <p className="text-light-100">You haven't taken any interviews yet.</p>
               ) : (
                 interviews.map((interview) => (
-                  <InterviewCard {...interview} cd={interviews} key={interview.id} />
+                  <InterviewCard {...interview} key={interview.id} />
                 ))
               )}
             </div>

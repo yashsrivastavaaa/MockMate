@@ -1,9 +1,10 @@
+'use client';
+
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { Button } from './Button';
-import Link from 'next/link';
-import InterviewDetails from '@/app/(root)/feedback/ViewFeedback';
+import { useRouter } from 'next/navigation'; // ✅ import router
 
 type InterviewCardProps = {
     id: number;
@@ -15,23 +16,10 @@ type InterviewCardProps = {
     cultural_fit: string | null;
     confidence: string | null;
 };
-type completeData = {
-    id: number;
-    user_id: string;
-    name: string;
-    email: string;
-    communication: string | null;
-    technical: string | null;
-    problem_solving: string | null;
-    cultural_fit: string | null;
-    confidence: string | null;
-    summary: string | null;
-    suggestions: string | null;
-    created_at: string | null;
-};
 
-const InterviewCard = (data: any, cd: completeData) => {
+const InterviewCard = (data: InterviewCardProps) => {
     const [totalScore, setTotalScore] = useState<number>(0);
+    const router = useRouter(); // ✅ initialize router
 
     const formattedDate = dayjs(data.created_at || Date.now()).format('MMM D, YYYY');
 
@@ -78,12 +66,13 @@ const InterviewCard = (data: any, cd: completeData) => {
                     </p>
 
                     <div className="flex flex-row justify-between mt-5">
-                        <Button className="!bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10" onClick={() => {
-                            <InterviewDetails interview={cd} />
-                        }}>
-
+                        <Button
+                            className="!bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !font-bold px-5 cursor-pointer min-h-10"
+                            onClick={() => {
+                                router.push(`/feedback/${data.id}`); // ✅ push to feedback page
+                            }}
+                        >
                             View Feedback
-
                         </Button>
                     </div>
                 </div>
