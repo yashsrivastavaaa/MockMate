@@ -23,11 +23,11 @@
 
 ## 🛠️ Tech Stack
 
-| Category      | Technologies Used                           |
+| Category      | Technologies Used                            |
 |---------------|----------------------------------------------|
-| Frontend      | Next.js, TypeScript, Tailwind CSS            |
+| Frontend      | Next.js, TypeScript                          |
 | Backend       | Firebase Auth, Google Gemini, 11labs API     |
-| Database      | PostgreSQL (via Prisma or other ORM)         |
+| Database      | PostgreSQL                                   |
 | Hosting       | Vercel                                       |
 | Voice & AI    | 11labs, Google Gemini                        |
 
@@ -58,12 +58,12 @@ touch .env.local
 
 Create a new file named `.env.local` in the root of your project and add the following content:
 
-``` # 🔐 Firebase Admin SDK
+``` 
 FIREBASE_PROJECT_ID=your-project-id
 FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nYOUR-PRIVATE-KEY\n-----END PRIVATE KEY-----\n"
 FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxx@your-project-id.iam.gserviceaccount.com
 
-# 🔐 Firebase Client Config
+
 NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project-id.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_DB_URL=https://your-project-id.firebaseio.com
@@ -73,17 +73,14 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
 NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
 
-# 🧠 Google Gemini
+
 NEXT_PUBLIC_GOOGLE_GENERATION_API_KEY=your-google-api-key
 NEXT_PUBLIC_GEMINI_API=GEMINI_API
 
-# 🗣️ AI Agent
-NEXT_PUBLIC_AI_AGENT_ID=11LABS_API
 
-# 🎙️ 11labs Voice API
+NEXT_PUBLIC_AI_AGENT_ID=11LABS_API
 NEXT_PUBLIC_11LABS_API_KEY=your-11labs-api-key
 
-# 🔗 Custom DB API
 NEXT_PUBLIC_DB_API=API_KEY_OF_NEON_DB
 ```
 
@@ -98,6 +95,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 --- 
 
 ## 🔮 Future Improvements
+
 📅 Interview scheduling with calendar integration
 
 📈 Performance analytics dashboard
